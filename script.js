@@ -1,6 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const inputs = document.querySelectorAll("input, textarea");
-    inputs.forEach(input => input.addEventListener("input", updateCV));
+    // Use event delegation for input events
+    document.getElementById('cv-form').addEventListener('input', function (event) {
+        if (event.target.matches('input, textarea')) {
+            updateCV();
+        }
+    });
+
+    // Initialize the form view
+    updateCV();
 });
 
 function updateCV() {
@@ -37,6 +44,14 @@ function addExperience() {
     }
 
     const experienceList = document.getElementById("cv-experience");
+    const experienceItem = createExperienceItem(role, company, year, desc);
+
+    experienceList.appendChild(experienceItem);
+    clearInputs("exp-role", "exp-company", "exp-year", "exp-desc");
+}
+
+// Function to create an experience item
+function createExperienceItem(role, company, year, desc) {
     const experienceItem = document.createElement("div");
     experienceItem.classList.add("experience-item");
 
@@ -45,9 +60,7 @@ function addExperience() {
         <p>${desc || "No description provided."}</p>
         <button class="delete-btn" onclick="removeEntry(this)">❌ Remove</button>
     `;
-
-    experienceList.appendChild(experienceItem);
-    clearExperienceInputs();
+    return experienceItem;
 }
 
 // Function to add education dynamically
@@ -63,6 +76,14 @@ function addEducation() {
     }
 
     const educationList = document.getElementById("cv-education");
+    const educationItem = createEducationItem(degree, institution, year, desc);
+
+    educationList.appendChild(educationItem);
+    clearInputs("edu-degree", "edu-institution", "edu-year", "edu-desc");
+}
+
+// Function to create an education item
+function createEducationItem(degree, institution, year, desc) {
     const educationItem = document.createElement("div");
     educationItem.classList.add("education-item");
 
@@ -71,9 +92,7 @@ function addEducation() {
         <p>${desc || "No description provided."}</p>
         <button class="delete-btn" onclick="removeEntry(this)">❌ Remove</button>
     `;
-
-    educationList.appendChild(educationItem);
-    clearEducationInputs();
+    return educationItem;
 }
 
 // Function to add certifications dynamically
@@ -88,16 +107,24 @@ function addCertification() {
         return;
     }
 
-    const certDiv = document.createElement("div");
-    certDiv.classList.add("cert-entry");
-    certDiv.innerHTML = `
+    const certList = document.getElementById("cv-certifications");
+    const certItem = createCertificationItem(title, institution, year, desc);
+
+    certList.appendChild(certItem);
+    clearInputs("cert-title", "cert-institution", "cert-year", "cert-desc");
+}
+
+// Function to create a certification item
+function createCertificationItem(title, institution, year, desc) {
+    const certItem = document.createElement("div");
+    certItem.classList.add("cert-entry");
+
+    certItem.innerHTML = `
         <p><strong>${title}</strong> - ${institution} (${year})</p>
         <p>${desc}</p>
         <button class="delete-btn" onclick="removeEntry(this)">❌ Remove</button>
     `;
-
-    document.getElementById("cv-certifications").appendChild(certDiv);
-    clearCertificationInputs();
+    return certItem;
 }
 
 // Function to remove an entry (Experience, Education, Certification)
@@ -105,28 +132,11 @@ function removeEntry(button) {
     button.parentElement.remove();
 }
 
-// Clears input fields after adding an experience
-function clearExperienceInputs() {
-    document.getElementById("exp-role").value = "";
-    document.getElementById("exp-company").value = "";
-    document.getElementById("exp-year").value = "";
-    document.getElementById("exp-desc").value = "";
-}
-
-// Clears input fields after adding education
-function clearEducationInputs() {
-    document.getElementById("edu-degree").value = "";
-    document.getElementById("edu-institution").value = "";
-    document.getElementById("edu-year").value = "";
-    document.getElementById("edu-desc").value = "";
-}
-
-// Clears input fields after adding certification
-function clearCertificationInputs() {
-    document.getElementById("cert-title").value = "";
-    document.getElementById("cert-institution").value = "";
-    document.getElementById("cert-year").value = "";
-    document.getElementById("cert-desc").value = "";
+// Clears input fields after adding an entry
+function clearInputs(...inputIds) {
+    inputIds.forEach(id => {
+        document.getElementById(id).value = "";
+    });
 }
 
 // Formats text as a bullet-point list
@@ -140,93 +150,62 @@ function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
-    html2canvas(document.getElementById("cv-preview")).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        doc.addImage(imgData, "PNG", 10, 10, 190, 0);
-        doc.save("Resume_Xpert_CV.pdf");
-    });
-}
+    // Use a professional font (e.g., Roboto or Arial)
+    doc.setFont("helvetica");
+    doc.setFontSize(12);
 
-// Google Sign-In API
-const CLIENT_ID = "294728932760-3ghqvj4frk7dr2bccsqgjucl8vd8on4s.apps.googleusercontent.com";
-const API_KEY = "YOUR_GOOGLE_API_KEY";
-const SCOPES = "https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file";
-
-function handleClientLoad() {
-    gapi.load("client:auth2", initClient);
-}
-
-function initClient() {
-    gapi.client.init({
-        apiKey: API_KEY,
-        clientId: CLIENT_ID,
-        discoveryDocs: ["https://docs.googleapis.com/$discovery/rest?version=v1"],
-        scope: SCOPES
-    }).then(() => {
-        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-            updateSigninStatus(true);
-        }
-    });
-}
-
-function signIn() {
-    gapi.auth2.getAuthInstance().signIn().then(() => {
-        updateSigninStatus(true);
-    });
-}
-
-function updateSigninStatus(isSignedIn) {
-    document.getElementById("auth-status").textContent = isSignedIn ? "✅ Signed In!" : "❌ Not Signed In";
-}
-
-function signOut() {
-    gapi.auth2.getAuthInstance().signOut().then(() => {
-        document.getElementById("auth-status").textContent = "❌ Signed Out";
-    });
-}
-let authInstance;
-
-function initGAPI() {
-    gapi.load("client:auth2", () => {
-        gapi.auth2.init({
-            client_id: "YOUR_CLIENT_ID", // Replace with your actual Client ID
-            scope: "profile email"
-        }).then(() => {
-            authInstance = gapi.auth2.getAuthInstance();
-            console.log("Google Auth Initialized:", authInstance);
-            updateSigninStatus(authInstance.isSignedIn.get());
-        }).catch(error => {
-            console.error("Error initializing Google API", error);
-        });
-    });
-}
-
-function signIn() {
-    if (!authInstance) {
-        console.error("Google Auth instance is not initialized.");
-        return;
+    // Add Name, Email, Phone, and LinkedIn
+    doc.text(20, 20, `Name: ${document.getElementById("name").value || "Your Name"}`);
+    doc.text(20, 30, `Email: ${document.getElementById("email").value || "you@example.com"}`);
+    doc.text(20, 40, `Phone: ${document.getElementById("phone").value || "+254700000000"}`);
+    
+    const linkedinURL = document.getElementById("linkedin").value;
+    if (linkedinURL) {
+        doc.text(20, 50, `LinkedIn: ${linkedinURL}`);
     }
-    authInstance.signIn().then(user => {
-        console.log("User signed in:", user);
-        updateSigninStatus(true);
-    }).catch(error => {
-        console.error("Sign-in error:", error);
-    });
-}
 
-function signOut() {
-    if (!authInstance) {
-        console.error("Google Auth instance is not initialized.");
-        return;
+    // Add Summary
+    doc.text(20, 60, `Summary:`);
+    doc.text(20, 70, document.getElementById("summary").value || "Your professional summary will appear here...");
+
+    // Add Skills
+    doc.text(20, 80, `Skills:`);
+    const skillsText = document.getElementById("skills").value;
+    doc.text(20, 90, formatList(skillsText));
+
+    // Add Experience
+    doc.text(20, 100, `Experience:`);
+    const experienceItems = document.getElementById("cv-experience").children;
+    let yOffset = 110;
+    for (let i = 0; i < experienceItems.length; i++) {
+        const item = experienceItems[i];
+        doc.text(20, yOffset, item.querySelector('h4').textContent);
+        yOffset += 10;
+        doc.text(20, yOffset, item.querySelector('p').textContent);
+        yOffset += 20;
     }
-    authInstance.signOut().then(() => {
-        console.log("User signed out.");
-        updateSigninStatus(false);
-    }).catch(error => {
-        console.error("Sign-out error:", error);
-    });
-}
 
-function updateSigninStatus(isSignedIn) {
-    document.getElementById("auth-status").textContent = isSignedIn ? "✅ Signed In!" : "❌ Not Signed In";
-}
+    // Add Education
+    doc.text(20, yOffset, `Education:`);
+    const educationItems = document.getElementById("cv-education").children;
+    yOffset += 10;
+    for (let i = 0; i < educationItems.length; i++) {
+        const item = educationItems[i];
+        doc.text(20, yOffset, item.querySelector('h4').textContent);
+        yOffset += 10;
+        doc.text(20, yOffset, item.querySelector('p').textContent);
+        yOffset += 20;
+    }
+
+    // Add Certifications
+    doc.text(20, yOffset, `Certifications:`);
+    const certItems = document.getElementById("cv-certifications").children;
+    yOffset += 10;
+    for (let i = 0; i < certItems.length; i++) {
+        const item = certItems[i];
+        doc.text(20, yOffset, item.querySelector('p').textContent);
+        yOffset += 10;
+    }
+
+    // Save the PDF
+    doc.save("Resume
