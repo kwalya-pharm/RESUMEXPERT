@@ -91,10 +91,9 @@
             <button onclick="addCertification()">Add Certification</button>
 
             <button onclick="downloadPDF()">Download CV</button>
-<button onclick="generateResume()">Generate Resume</button>
-            <button onclick="signIn()">🔑 Sign in with Google</button>
-<button onclick="signOut()">🚪 Sign Out</button>
-<p id="auth-status">❌ Not Signed In</p>
+            <button id="sign-in-btn" onclick="signIn()">Sign in with Google</button>
+            <button id="sign-out-btn" onclick="signOut()" style="display:none;">Sign Out</button>
+            <p id="auth-status">❌ Not Signed In</p>
         </section>
         
         <!-- CV Preview -->
