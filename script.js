@@ -184,3 +184,49 @@ function signOut() {
         document.getElementById("auth-status").textContent = "❌ Signed Out";
     });
 }
+let authInstance;
+
+function initGAPI() {
+    gapi.load("client:auth2", () => {
+        gapi.auth2.init({
+            client_id: "YOUR_CLIENT_ID", // Replace with your actual Client ID
+            scope: "profile email"
+        }).then(() => {
+            authInstance = gapi.auth2.getAuthInstance();
+            console.log("Google Auth Initialized:", authInstance);
+            updateSigninStatus(authInstance.isSignedIn.get());
+        }).catch(error => {
+            console.error("Error initializing Google API", error);
+        });
+    });
+}
+
+function signIn() {
+    if (!authInstance) {
+        console.error("Google Auth instance is not initialized.");
+        return;
+    }
+    authInstance.signIn().then(user => {
+        console.log("User signed in:", user);
+        updateSigninStatus(true);
+    }).catch(error => {
+        console.error("Sign-in error:", error);
+    });
+}
+
+function signOut() {
+    if (!authInstance) {
+        console.error("Google Auth instance is not initialized.");
+        return;
+    }
+    authInstance.signOut().then(() => {
+        console.log("User signed out.");
+        updateSigninStatus(false);
+    }).catch(error => {
+        console.error("Sign-out error:", error);
+    });
+}
+
+function updateSigninStatus(isSignedIn) {
+    document.getElementById("auth-status").textContent = isSignedIn ? "✅ Signed In!" : "❌ Not Signed In";
+}
