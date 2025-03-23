@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
     <header>
@@ -89,6 +90,9 @@
 
             <button onclick="downloadPDF()">Download CV</button>
 <button onclick="generateResume()">Generate Resume</button>
+            <button onclick="signIn()">🔑 Sign in with Google</button>
+<button onclick="signOut()">🚪 Sign Out</button>
+<p id="auth-status">❌ Not Signed In</p>
         </section>
         
         <!-- CV Preview -->
