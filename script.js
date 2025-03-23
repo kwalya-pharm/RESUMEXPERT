@@ -174,3 +174,81 @@ function generateResume() {
     })
     .catch(error => console.error("Error:", error));
 }
+// ✅ Replace with your Google Client ID
+const CLIENT_ID = 294728932760-3ghqvj4frk7dr2bccsqgjucl8vd8on4s.apps.googleusercontent.com
+
+// Scopes for Google Docs API & Google Drive API
+const SCOPES = "https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file";
+
+function handleClientLoad() {
+    gapi.load("client:auth2", initClient);
+}
+
+function initClient() {
+    gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: ["https://docs.googleapis.com/$discovery/rest?version=v1"],
+        scope: SCOPES
+    }).then(() => {
+        // Check if user is signed in
+        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+            updateSigninStatus(true);
+        }
+    });
+}
+
+function signIn() {
+    gapi.auth2.getAuthInstance().signIn().then(() => {
+        updateSigninStatus(true);
+    });
+}
+
+function updateSigninStatus(isSignedIn) {
+    if (isSignedIn) {
+        document.getElementById("auth-status").textContent = "✅ Signed In!";
+    } else {
+        document.getElementById("auth-status").textContent = "❌ Not Signed In";
+    }
+}
+
+function signOut() {
+    gapi.auth2.getAuthInstance().signOut().then(() => {
+        document.getElementById("auth-status").textContent = "❌ Signed Out";
+    });
+}
+async function generateGoogleDocsResume() {
+    const accessToken = gapi.auth.getToken().access_token; // Get OAuth token
+    const apiUrl = "https://docs.googleapis.com/v1/documents";
+
+    const resumeContent = {
+        title: "Resume_Xpert_CV",
+        body: {
+            content: [
+                { paragraph: { elements: [{ textRun: { content: "Resume\n\n", textStyle: { bold: true, fontSize: { magnitude: 24, unit: "PT" } } } }] } },
+                { paragraph: { elements: [{ textRun: { content: "Name: " + document.getElementById("name").value + "\n" } }] } },
+                { paragraph: { elements: [{ textRun: { content: "Email: " + document.getElementById("email").value + "\n" } }] } },
+                { paragraph: { elements: [{ textRun: { content: "Phone: " + document.getElementById("phone").value + "\n" } }] } },
+                { paragraph: { elements: [{ textRun: { content: "Education: " + document.getElementById("edu-degree").value + " - " + document.getElementById("edu-institution").value + "\n" } }] } },
+                { paragraph: { elements: [{ textRun: { content: "Experience: " + document.getElementById("exp-role").value + " at " + document.getElementById("exp-company").value + "\n" } }] } }
+            ]
+        }
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(resumeContent)
+        });
+
+        const data = await response.json();
+        alert("Resume Created! Open: https://docs.google.com/document/d/" + data.documentId);
+        window.open("https://docs.google.com/document/d/" + data.documentId, "_blank");
+    } catch (error) {
+        console.error("Error creating resume:", error);
+    }
+}
