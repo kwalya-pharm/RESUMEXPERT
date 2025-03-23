@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(90deg, #000000, #3533cd);
@@ -6,14 +7,16 @@ body {
     padding: 0;
 }
 
+/* Header */
 header {
     background: #000000;
     padding: 20px;
     text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 191, 99, 0.5);
 }
 
 .logo {
-    width: 180px;
+    width: 150px;
     height: auto;
     border-radius: 12px;
     box-shadow: 0px 5px 10px rgba(0, 191, 99, 0.6);
@@ -32,84 +35,152 @@ header {
     font-size: 18px;
 }
 
+/* Main Container (Ensuring Side-by-Side Layout) */
 .container {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: space-between; /* Aligns form & preview side by side */
+    align-items: flex-start; /* Aligns to the top */
     padding: 30px;
     gap: 30px;
+    flex-wrap: nowrap; /* Prevents wrapping on larger screens */
+    max-width: 1200px;
+    margin: auto;
 }
 
+/* Form & CV Preview */
 .form-container, .cv-container {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.95);
     color: #000;
     padding: 25px;
     border-radius: 14px;
     box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.4);
     transition: box-shadow 0.3s ease-in-out, transform 0.2s;
+    flex-grow: 1;
 }
 
+/* Adjusting Widths for Proper Alignment */
+.form-container {
+    width: 45%;
+    min-width: 350px;
+}
+
+.cv-container {
+    width: 50%;
+    min-width: 400px;
+    max-height: 90vh; /* Prevents overflow */
+    overflow-y: auto; /* Enables scrolling if content overflows */
+}
+
+/* Hover Effects */
 .form-container:hover, .cv-container:hover {
     box-shadow: 0px 7px 18px rgba(0, 191, 99, 0.6);
     transform: scale(1.02);
 }
 
-.form-container {
-    width: 42%;
-}
-
-.cv-container {
-    width: 48%;
-}
-
+/* CV Header */
 .cv-header h2, section h3 {
     color: #3533cd;
     font-size: 22px;
     font-weight: bold;
 }
 
-input, textarea {
+/* Input Fields & Textareas */
+input, textarea, select {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     margin-top: 10px;
     border: 2px solid #bbb;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
     transition: border 0.3s ease-in-out;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
     border-color: #3533cd;
     outline: none;
     box-shadow: 0 0 8px rgba(53, 51, 205, 0.7);
 }
 
+/* Buttons */
 button {
     background: #00bf63;
     color: #ffffff;
     border: none;
-    padding: 16px;
+    padding: 14px;
     margin-top: 20px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    border-radius: 10px;
+    border-radius: 8px;
     transition: background 0.3s ease-in-out, transform 0.2s;
+    width: 100%;
+    max-width: 300px;
 }
 
 button:hover {
     background: #008f4c;
-    transform: scale(1.07);
+    transform: scale(1.05);
 }
 
+/* Certification Entries */
+.cert-entry {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.cert-entry p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.cert-entry hr {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background 0.3s ease-in-out;
+}
+
+.delete-btn:hover {
+    background: #c9302c;
+    transform: scale(1.05);
+}
+
+/* Footer */
 footer {
     text-align: center;
     padding: 15px;
     background: #000000;
     color: #00bf63;
     font-size: 18px;
+    box-shadow: 0px -4px 8px rgba(0, 191, 99, 0.5);
 }
 
+/* Lists */
+ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+
+ul li {
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #000;
+}
+
+/* LinkedIn Icon */
 .linkedin-symbol {
     width: 24px;
     height: 24px;
@@ -117,3 +188,9 @@ footer {
     margin-right: 5px;
     filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3));
 }
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column; /* Stacks elements on smaller screens */
+        align
