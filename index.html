@@ -36,21 +36,62 @@
             <label for="summary">Summary:</label>
             <textarea id="summary" placeholder="Brief about you..." oninput="updateCV()"></textarea>
 
-            <label for="experience">Work Experience:</label>
-            <textarea id="experience" placeholder="Job Title, Company, Year..." oninput="updateCV()"></textarea>
+            <!-- Work Experience Inputs -->
+            <h3>Work Experience</h3>
+            <label for="exp-role">Job Title:</label>
+            <input type="text" id="exp-role" placeholder="Software Engineer">
 
-            <label for="education">Education:</label>
-            <textarea id="education" placeholder="Degree, Institution, Year..." oninput="updateCV()"></textarea>
+            <label for="exp-company">Company:</label>
+            <input type="text" id="exp-company" placeholder="Google">
+
+            <label for="exp-year">Years (e.g., 2019-2023):</label>
+            <input type="text" id="exp-year" placeholder="2019-2023">
+
+            <label for="exp-desc">Job Description:</label>
+            <textarea id="exp-desc" placeholder="Describe your role..."></textarea>
+
+            <button onclick="addExperience()">Add Experience</button>
+
+            <!-- Education Inputs -->
+            <h3>Education</h3>
+            <label for="edu-degree">Degree:</label>
+            <input type="text" id="edu-degree" placeholder="Bachelor of Science in Computer Science">
+
+            <label for="edu-institution">Institution:</label>
+            <input type="text" id="edu-institution" placeholder="Harvard University">
+
+            <label for="edu-year">Years (e.g., 2015-2019):</label>
+            <input type="text" id="edu-year" placeholder="2015-2019">
+
+            <label for="edu-desc">Description:</label>
+            <textarea id="edu-desc" placeholder="Describe your education..."></textarea>
+
+            <button onclick="addEducation()">Add Education</button>
 
             <label for="skills">Skills:</label>
             <textarea id="skills" placeholder="List key skills..." oninput="updateCV()"></textarea>
 
-            <label for="certifications">Trainings & Certifications:</label>
-            <textarea id="certifications" placeholder="Certification, Institution, Year..." oninput="updateCV()"></textarea>
+            <!-- Trainings & Certifications -->
+            <h3>Trainings & Certifications</h3>
+            <label for="cert-title">Certification Title:</label>
+            <input type="text" id="cert-title" placeholder="Certified Pharmacist">
+
+            <label for="cert-institution">Institution:</label>
+            <input type="text" id="cert-institution" placeholder="Harvard Medical School">
+
+            <label for="cert-year">Year:</label>
+            <input type="text" id="cert-year" placeholder="2022">
+
+            <label for="cert-desc">Description:</label>
+            <textarea id="cert-desc" placeholder="Brief details about the certification..."></textarea>
+
+            <button onclick="addCertification()">Add Certification</button>
 
             <button onclick="downloadPDF()">Download CV</button>
+<button onclick="generateResume()">Generate Resume</button>
         </section>
         
+        <!-- CV Preview -->
         <section class="cv-container" id="cv-preview">
             <div class="cv-header">
                 <h2 id="cv-name">Your Name</h2>
@@ -70,11 +111,11 @@
                 </section>
                 <section>
                     <h3>Work Experience</h3>
-                    <p id="cv-experience">Your experience will be shown here...</p>
+                    <div id="cv-experience">Your experience will be shown here...</div>
                 </section>
                 <section>
                     <h3>Education</h3>
-                    <p id="cv-education">Your education details will be displayed here...</p>
+                    <div id="cv-education">Your education details will be displayed here...</div>
                 </section>
                 <section>
                     <h3>Skills</h3>
@@ -82,7 +123,7 @@
                 </section>
                 <section>
                     <h3>Trainings & Certifications</h3>
-                    <p id="cv-certifications">Your certifications will appear here...</p>
+                    <div id="cv-certifications">Your certifications will be displayed here...</div>
                 </section>
             </div>
         </section>
