@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Xpert - Professional CV Builder</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <img src="logo.jpg" alt="Resume Xpert Logo" class="logo">
+            <h1>Resume Xpert</h1>
+            <p>Resume Excellence | Career Success</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="form-container">
+            <h2>Build Your Professional CV</h2>
+
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" placeholder="Your Name" oninput="updateCV()" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="you@example.com" oninput="updateCV()" required>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" placeholder="+254700000000" oninput="updateCV()" required>
+            
+            <label for="linkedin">LinkedIn Profile:</label>
+            <input type="url" id="linkedin" placeholder="LinkedIn URL" oninput="updateCV()">
+
+            <label for="summary">Summary:</label>
+            <textarea id="summary" placeholder="Brief about you..." oninput="updateCV()"></textarea>
+
+            <label for="experience">Work Experience:</label>
+            <textarea id="experience" placeholder="Job Title, Company, Year..." oninput="updateCV()"></textarea>
+
+            <label for="education">Education:</label>
+            <textarea id="education" placeholder="Degree, Institution, Year..." oninput="updateCV()"></textarea>
+
+            <label for="skills">Skills:</label>
+            <textarea id="skills" placeholder="List key skills..." oninput="updateCV()"></textarea>
+
+            <label for="certifications">Trainings & Certifications:</label>
+            <textarea id="certifications" placeholder="Certification, Institution, Year..." oninput="updateCV()"></textarea>
+
+            <button onclick="downloadPDF()">Download CV</button>
+        </section>
+        
+        <section class="cv-container" id="cv-preview">
+            <div class="cv-header">
+                <h2 id="cv-name">Your Name</h2>
+                <p id="cv-email">you@example.com</p>
+                <p id="cv-phone">+254700000000</p>
+                <p id="cv-linkedin">
+                    <a href="#" id="cv-linkedin-url" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="linkedin-symbol">
+                    </a>
+                </p>
+            </div>
+            <hr>
+            <div class="cv-content">
+                <section>
+                    <h3>About Me</h3>
+                    <p id="cv-summary">Your professional summary will appear here...</p>
+                </section>
+                <section>
+                    <h3>Work Experience</h3>
+                    <p id="cv-experience">Your experience will be shown here...</p>
+                </section>
+                <section>
+                    <h3>Education</h3>
+                    <p id="cv-education">Your education details will be displayed here...</p>
+                </section>
+                <section>
+                    <h3>Skills</h3>
+                    <p id="cv-skills">Your skills will appear here...</p>
+                </section>
+                <section>
+                    <h3>Trainings & Certifications</h3>
+                    <p id="cv-certifications">Your certifications will appear here...</p>
+                </section>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>📩 Contact us on WhatsApp: <a href="https://wa.me/254748052811">0748052811</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
